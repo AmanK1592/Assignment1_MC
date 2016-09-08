@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // sleep to slow down the add of entries
                     try {
-                        Thread.sleep(600);
+                        Thread.sleep(50);
                     } catch (InterruptedException e) {
                         // manage error ...
                         e.printStackTrace();
