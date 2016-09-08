@@ -43,40 +43,43 @@ public class MainActivity extends AppCompatActivity {
         btnStop = (Button) findViewById(R.id.btnStop);
         final GraphView graph = (GraphView) findViewById(R.id.graph);
         Series = new LineGraphSeries<DataPoint>();
+        graph.addSeries(Series);
+        Viewport viewport = graph.getViewport();
+        viewport.setYAxisBoundsManual(true);
+        viewport.setMinY(0);
+        viewport.setMaxY(10);
+        viewport.setScrollable(true);
 
-
-
-        btnRun.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                graph.addSeries(Series);
-                Viewport viewport = graph.getViewport();
-                viewport.setYAxisBoundsManual(true);
-                viewport.setMinY(0);
-                viewport.setMaxY(10);
-                viewport.setScrollable(true);
-
-                viewport.setXAxisBoundsManual(true);
-                viewport.setMinX(0);
-                viewport.setMaxX(10);
-                viewport.setScrollable(true);
+        viewport.setXAxisBoundsManual(true);
+        viewport.setMinX(0);
+        viewport.setMaxX(10);
+        viewport.setScrollable(true);
 
 
 
 
 
-//                LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
-//                        new DataPoint(0, 1),
-//                        new DataPoint(1, 5),
-//                        new DataPoint(2, 3),
-//                        new DataPoint(3, 2),
-//                        new DataPoint(4, 6)
-//                });
-//                graph.addSeries(series);
-            }
-        });
+//        btnRun.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//
+//
+//
+//
+//
+//
+//
+////                LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
+////                        new DataPoint(0, 1),
+////                        new DataPoint(1, 5),
+////                        new DataPoint(2, 3),
+////                        new DataPoint(3, 2),
+////                        new DataPoint(4, 6)
+////                });
+////                graph.addSeries(series);
+//            }
+//        });
 
 
 
@@ -127,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
                         Thread.sleep(600);
                     } catch (InterruptedException e) {
                         // manage error ...
+                        e.printStackTrace();
                     }
                 }
             }
@@ -138,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
         // here, we choose to display max 10 points on the viewport and we scroll to end
         Series.appendData(new DataPoint(lastX++, RANDOM.nextDouble() * 10d), true, 10);
     }
+
+
+
+
 
 
     @Override
