@@ -13,6 +13,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.GridLabelRenderer;
 import com.jjoe64.graphview.Viewport;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -43,7 +46,12 @@ public class MainActivity extends AppCompatActivity {
         btnStop = (Button) findViewById(R.id.btnStop);
         final GraphView graph = (GraphView) findViewById(R.id.graph);
         Series = new LineGraphSeries<DataPoint>();
-        graph.addSeries(Series);
+
+        GridLabelRenderer gridLabel = graph.getGridLabelRenderer();
+        gridLabel.setHorizontalAxisTitle("Time");
+        gridLabel.setVerticalAxisTitle("Amplitude");
+
+
         Viewport viewport = graph.getViewport();
         viewport.setYAxisBoundsManual(true);
         viewport.setMinY(0);
@@ -59,34 +67,26 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-//        btnRun.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//
-//
-//
-//
-//
-//
-//
-////                LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
-////                        new DataPoint(0, 1),
-////                        new DataPoint(1, 5),
-////                        new DataPoint(2, 3),
-////                        new DataPoint(3, 2),
-////                        new DataPoint(4, 6)
-////                });
-////                graph.addSeries(series);
-//            }
-//        });
+        btnRun.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                    graph.addSeries(Series);
+                    //Plotting a continuous real time graph on clicking the Run button
+
+                }
+
+        });
 
 
 
         btnStop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 graph.removeAllSeries();
+                // Clearing the running graph on clicking the Stop button
+
             }
         });
 
@@ -107,16 +107,16 @@ public class MainActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    //creating a new thread
     @Override
     protected void onResume(){
         super.onResume();
-        // we're going to simulate real time with thread that append data to the graph
         new Thread(new Runnable() {
-
             @Override
             public void run() {
-                // we add 100 new entries
-                for (int i = 0; i < 100; i++) {
+                while(true)
+
+                {
                     runOnUiThread(new Runnable() {
 
                         @Override
@@ -127,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // sleep to slow down the add of entries
                     try {
-                        Thread.sleep(50);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         // manage error ...
                         e.printStackTrace();
@@ -135,17 +135,13 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }).start();
+
     }
 
-    // add random data to graph
+    // adding random data to graph
     private void addEntry() {
-        // here, we choose to display max 10 points on the viewport and we scroll to end
         Series.appendData(new DataPoint(lastX++, RANDOM.nextDouble() * 10d), true, 10);
     }
-
-
-
-
 
 
     @Override
@@ -168,19 +164,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private DataPoint[] generateData() {
-        int count = 30;
-        DataPoint[] values = new DataPoint[count];
-        for (int i=0; i<count; i++) {
-            double x = i;
-            double f = Math.random()*0.15+0.3;
-            double y = Math.sin(i*f+2) + Math.random()*0.3;
-            DataPoint v = new DataPoint(x, y);
-            values[i] = v;
-        }
-        return values;
     }
 
     @Override
