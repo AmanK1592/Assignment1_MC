@@ -107,7 +107,9 @@ public class MainActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    //creating a new thread
+    //Creating a new thread
+    //The thread part has been implemented from the following resource:
+    // http://www.ssaurel.com/blog/create-a-real-time-line-graph-in-android-with-graphview/
     @Override
     protected void onResume(){
         super.onResume();
